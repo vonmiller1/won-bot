@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  gemma-scribe:
+    build: .
+    container_name: gemma-medical-scribe
+    ports:
+      - "8501:8501"
+    environment:
+      - MODEL_NAME=gemma4:e4b
+      - OLLAMA_HOST=http://ollama:11434
+      - STREAMLIT_PORT=8501
+    depends_on:
+      - ollama
+    restart: unless-stopped
+    volumes:
+      - ./data:/app/data
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: gemma-ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    restart: unless-stopped
+
+volumes:
+  ollama_data:
